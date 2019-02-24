@@ -1,5 +1,6 @@
 # Particle-Filter-SLAM
-1. utils_function.py will be the function sets used in mapping, prediction and update.
-2. mapping.py will be the first Lidar scan mapping test.
-3. dead_reckoning.py will be testing of the particle filter with only one particle with prediction step but without update step.
-4. prediction.py will be the particle filter for SLAM. 
+1. utils_function.py is the function sets used in mapping, prediction and update.
+2. mapping.py is the first Lidar scan mapping test.
+3. dead_reckoning.py is testing of the particle filter with only one particle with prediction step but without update step.
+4. particlefilter.py is the particle filter for SLAM. 
+5. texture.py is the implementation of coloring the grid map with RGBD data from Kinect. 
