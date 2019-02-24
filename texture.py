@@ -66,7 +66,6 @@ for i in range(len(best_particle_state_scaled)):
     rgbd = plt.imread('rgb20_{}.png'.format(i+1))
     os.chdir(r'/Users/LuLienHsi/Desktop/UCSD_Documents/2019_Winter/ECE276A_Sensing&EstimationRobotics/ECE276A_HW2/dataRGBD/Disparity20') #go into directory 
     disparity = plt.imread('disparity20_{}.png'.format(dis_index_list[i]))
-    print('fuck')
 #    rgb_optical = np.zeros((height,width), dtype = [('x','f8'),('y','f8'),('z','f8')])
     dd = (-0.00304*disparity + 3.31)
     depth = 1.03/dd
@@ -91,15 +90,6 @@ for i in range(len(best_particle_state_scaled)):
     
     
     
-#    for j in range(len(pixelinWorld[0])):
-#        if pixelinWorld[2,j] > 3.2 :
-#            continue
-#        else:
-#            color = rgbd[int(flat_rgbi[j])][int(flat_rgbj[j])]
-#    
-#            map_x = xy2map(pixelinWorld[0,j]+best_particle_state_scaled[i][0])
-#            map_y = xy2map(pixelinWorld[1,j]+best_particle_state_scaled[i][1])
-#            rgbmap[map_x][map_y] = color
 #%%          
 fig = plt.figure()
 plt.imshow(rgbmap);  
