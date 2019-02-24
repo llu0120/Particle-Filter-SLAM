@@ -1,16 +1,10 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Feb 20 23:58:21 2019
-
-@author: LuLienHsi
-"""
-
 import numpy as np
 import matplotlib.pyplot as plt; plt.ion()
 import os
 os.chdir(r'/Users/LuLienHsi/Desktop/UCSD_Documents/2019_Winter/ECE276A_Sensing&EstimationRobotics/ECE276A_HW2/data') #进入指定的目录
 from map_utils import bresenham2D
+from numpy.linalg import inv
+
 
 
 def Body2World(x,y,theta): 
@@ -159,7 +153,7 @@ def motion_difference(velocity, omega, thetai, encoder_time_diff, imu_time_diff)
     
     omega_term = omega * imu_time_diff/2 
 
-    x_diff = velocity*encoder_time_diff*(np.sin(omega_term)/omega_term)*np.cos(thetai + omega_term)
+    x_diff = velocity*  encoder_time_diff*(np.sin(omega_term)/omega_term)*np.cos(thetai + omega_term)
     y_diff = velocity*encoder_time_diff*(np.sin(omega_term)/omega_term)*np.sin(thetai + omega_term)
   
     return theta_diff, x_diff, y_diff
@@ -167,4 +161,25 @@ def motion_difference(velocity, omega, thetai, encoder_time_diff, imu_time_diff)
     
 def softmax(x):
     e_x = np.exp(x-np.max(x))
-    return e_x / e_x.sum()  
+    return e_x / e_x.sum()
+
+def pixel2optical(pixeluv1,flat_depth):
+    K = [[585.05108211, 0, 242.94140713],
+         [0, 585.05108211, 315.83800193],  
+         [0, 0, 1]]
+    canonical = flat_depth
+    result = canonical*np.dot(inv(K), pixeluv1)
+    return result
+
+def CameraRotation(pixelincamera):
+    rotation_matrix =[[np.cos(0.36),0,np.sin(0.36)],
+                      [0, 1, 0],
+                      [-np.sin(0.36), 0, np.cos(0.36)]]
+    return np.dot(rotation_matrix, pixelincamera)
+
+def pixelBody2World(opticalinbody,theta): 
+    Transform_matrix = [[np.cos(theta),-np.sin(theta),0],[np.sin(theta),np.cos(theta),0],[0,0,1]]
+    result = np.dot(Transform_matrix,opticalinbody)
+    return result
+
+
