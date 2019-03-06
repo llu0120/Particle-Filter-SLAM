@@ -113,9 +113,9 @@ def compute_motion_model(encoder_ticks,encoder_time,imu_yaw,imu_time):
     
     #linear velocity
     velocity = [0]
-    right_v = (encoder_ticks[0] + encoder_ticks[2])/2*0.0022
-    left_v =  (encoder_ticks[1] + encoder_ticks[3])/2*0.0022
-    distance = (right_v + left_v)/2
+    right_dis = (encoder_ticks[0] + encoder_ticks[2])/2*0.0022
+    left_dis =  (encoder_ticks[1] + encoder_ticks[3])/2*0.0022
+    distance = (right_dis + left_dis)/2
     for i in range(len(encoder_time)):
         if i != 0:
             dt = encoder_time[i] - encoder_time[i-1]
