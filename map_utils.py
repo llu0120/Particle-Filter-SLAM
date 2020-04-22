@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt; plt.ion()
-from mpl_toolkits.mplot3d import Axes3D
 import time
 
 def tic():
@@ -108,7 +107,7 @@ def test_bresenham2D():
 
 def test_mapCorrelation():
   angles = np.arange(-135,135.25,0.25)*np.pi/180.0
-  ranges = np.load("test_ranges.npy")
+  ranges = np.load("/saved_npy/test_ranges.npy")
 
   # take valid indices
   indValid = np.logical_and((ranges < 30),(ranges> 0.1))
@@ -175,11 +174,9 @@ def test_mapCorrelation():
 	  print("...Test failed. Close figures to continue tests.")	
 
   #plot original lidar points
-  fig1 = plt.figure()
   plt.plot(xs0,ys0,'.k')
 
   #plot map
-  fig2 = plt.figure()
   plt.imshow(MAP['map'],cmap="hot");
 
   #plot correlation
@@ -192,7 +189,7 @@ def test_mapCorrelation():
   
 def show_lidar():
   angles = np.arange(-135,135.25,0.25)*np.pi/180.0
-  ranges = np.load("test_ranges.npy")
+  ranges = np.load("/saved_npy/test_ranges.npy")
   ax = plt.subplot(111, projection='polar')
   ax.plot(angles, ranges)
   ax.set_rmax(10)

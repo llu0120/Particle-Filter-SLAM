@@ -7,11 +7,9 @@ Created on Sun Feb 17 18:49:43 2019
 """
 import numpy as np
 import matplotlib.pyplot as plt; plt.ion()
-import os
-os.chdir(r'/Users/LuLienHsi/Desktop/UCSD_Documents/2019_Winter/ECE276A_Sensing&EstimationRobotics/ECE276A_HW2/data') #进入指定的目录
 from load_data import encoder, imu, lidar
 from map_utils import mapCorrelation
-from utils_function import Body2World, MapInitialize, xy2map, lamda2Binary, mapping, compute_motion_model, motion_difference, softmax
+from utils_function import Body2World, MapInitialize, lamda2Binary, mapping, compute_motion_model, motion_difference, softmax
 
 encoder = encoder()
 encoder_ticks = encoder.encoder_counts[:,11:4902]  # 4 x n encoder counts
@@ -23,9 +21,6 @@ imu_time = imu.imu_stamps
 
 x_t,y_t,theta_t,velocity, angular_velocity, imu_time = compute_motion_model(encoder_ticks,encoder_time,imu_yaw,imu_time)
 
-       
-#plt.scatter(x_t,y_t)
-#plt.show()
 
 #%%
 #Initialize MAP
@@ -56,15 +51,11 @@ lidar = lidar()
 l_ranges = lidar.lidar_ranges 
 l_angles = np.arange(-135,135.25,0.25)*np.pi/180.0
 
-#xorigin = particle_state[0] 
-#yorigin = particle_state[1] 
-
 #Initialize logodds map  
 lamda = np.zeros((1601,1601))
 best_trajectory=[]
 
 #%%
-
 for i in range(len(x_t)):
     print(i)
     if i == len(x_t)-1: 
@@ -72,7 +63,8 @@ for i in range(len(x_t)):
     
     #im is the logodds map that need to plug into mapCorrelation
     im = lamda2Binary(lamda)
-    #Predict the next pose of the particle     
+    
+    #Prediction Step: predict the next pose of each particles     
     for p in range(N): 
         noise = noise_motion*np.random.randn(1,3)
         particle_state[p] = particle_state[p] + noise
@@ -83,11 +75,10 @@ for i in range(len(x_t)):
     print(particle_state[0],particle_state[1],particle_state[2])
     particle_state[:,2] %= 2*np.pi
     
-    
-    
-    #New Lidar measurement 
+    #New observation(Lidar measurement)
     next_scan = l_ranges[:,i]
-    #Remove to far or near scan 
+    
+    #Remove too far or too near scan 
     good = np.logical_and((next_scan < 30),(next_scan > 0.1))
     valid_l_ranges = next_scan[good]
     valid_l_angles = l_angles[good]
@@ -117,7 +108,8 @@ for i in range(len(x_t)):
           
 
 
-#%%
+#%% 
+#Transform log odds map to the binary map 
 lamda = lamda2Binary(lamda)     
 fig = plt.figure()
 plt.imshow(lamda,cmap="gray");  
